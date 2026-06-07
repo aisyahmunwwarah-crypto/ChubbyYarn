@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChubbyYarn - Home</title>
+  
+  <!-- Link Icon FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* CSS */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #fdf2f8; /* Pink tenang */
+      padding: 20px;
+    }
+
+    /* NAVBAR & SIDEBAR */
+    
+    /* HEADER UTAMA */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 15px 30px;
+      border-radius: 50px;
+      box-shadow: 0 4px 20px rgba(219, 39, 119, 0.08);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-weight: bold;
+      color: #db2777;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+    }
+/* BUTANG MENU  */
+    .menu-btn {
+      font-size: 22px;
+      color: #db2777;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 5px;
+      transition: transform 0.2s;
+    }
+    .menu-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 998;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -320px; 
+      width: 320px;
+      height: 100%;
+      background-color: #ffffff;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+      transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 40px 30px;
+      z-index: 999;
+    }
+
+    /* KELAS AKTIF  */
+    .sidebar.open { right: 0; }
+    .overlay.open { opacity: 1; pointer-events: auto; }
+
+    .close-btn {
+      font-size: 22px;
+      color: #9ca3af;
+      cursor: pointer;
+      float: right;
+      transition: color 0.2s, transform 0.2s;
+    }
+     /* BUTANG PANGKAH (CLOSE) */
+    .close-btn:hover { 
+      color: #db2777; 
+      transform: rotate(90deg);
+    }
+
+    .sidebar-links {
+      clear: both;
+      list-style: none;
+      margin-top: 50px;
+    }
+
+    .sidebar-links li { margin-bottom: 15px; }
+
+    .sidebar-links a {
+      text-decoration: none;
+      color: #4b5563;
+      font-size: 18px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-links a i {
+      margin-right: 15px;
+      font-size: 20px;
+      width: 25px;
+    }
+
+    .sidebar-links a:hover {
+      background-color: #fdf2f8;
+      color: #db2777;
+      padding-left: 25px;
+    }
+
+    .sidebar-links .active {
+      background-color: #db2777;
+      color: #ffffff !important;
+    }
+
+    /* SLIDESHOW */
+    .mySlides { display: none; }
+    img { vertical-align: middle; }
+
+    .slideshow-container {
+      max-width: 1000px;
+      position: relative;
+      margin: auto;
+    }
+
+/* setting picture */
+    .slideshow-container img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      margin-top: 50px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      border-radius: 15px; 
+    }
+/* Next & previous buttons */
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 55%;
+      width: auto;
+      padding: 16px;
+      margin-top: -22px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.6s ease;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+    }
+/* Position the "next button" to the right */
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+
+    .prev:hover, .next:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+/* Caption text */
+    .text {
+      color: #f2f2f2;
+      padding: 8px 12px;
+      position: absolute;
+      bottom: 8px;
+      width: 100%;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.6);
+      font-family: 'Dancing Script', cursive; 
+      font-size: 26px;
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
+    .text-pink {
+      color: rgb(0, 0, 0);
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 8px 12px;
+      position: absolute;
+      bottom: 8px;
+      width: 100%;
+      text-align: center;
+      font-family: 'Dancing Script', cursive; 
+      font-size: 26px;
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
+    .numbertext {
+      color: #f2f2f2;
+      font-size: 12px;
+      padding: 8px 12px;
+      position: absolute;
+      top: 50px; 
+      left: 10px;
+    }
+
+    .dot {
+      cursor: pointer;
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.6s ease;
+    }
+
+    /* menu */
+    .slide-active, .dot:hover {
+      background-color: #717171;
+    }
+
+    .fade {
+      animation-name: fade;
+      animation-duration: 1.5s;
+    }
+
+    @keyframes fade {
+      from { opacity: .4; } 
+      to { opacity: 1; }
+    }
+
+    @media only screen and (max-width: 300px) {
+      .prev, .next, .text { font-size: 11px; }
+    }
+    /* flip card  */
+     
+     
+     {
+      background-color: #fdf2f8; 
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #db2777;
+      margin-bottom: 30px;
+    }
+
+
+   
+    .card-grid {
+      display: flex;               
+      gap: 25px;                
+      justify-content: center;   
+      max-width: 1500px;       
+      width: 100%;
+      flex-wrap: wrap;
+      margin:0 auto;
+    }
+
+    /* KAD UTAMA */
+    .yarn-card {
+      background-color: transparent;
+      width: 260px;              /* Lebar setiap satu kad */
+      height: 340px;             /* Tinggi setiap satu kad */
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.5s ease-in-out;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    .yarn-card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      -webkit-backface-visibility: hidden; 
+      backface-visibility: hidden;          
+    }
+
+    .card-front {
+      background-color: #ffffff;
+      color: #333333;
+      z-index: 2;
+    }
+
+    .card-front img {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      border: 4px solid #fdf2f8;
+    }
+
+    .card-front h3 {
+      color: #db2777;
+      font-size: 18px;
+    }
+
+    .card-back {
+      background-color: #db2777;
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    .recommendation {
+      font-weight: bold;
+      margin-top: 5px;
+      font-size: 13px;
+      background: rgba(255,255,255,0.25);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .card-back ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    .card-back li {
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    /* droup down menu  */
+    .dropdown-container {
+  display: none;
+  background-color: #fdf2f8;
+  list-style: none;
+  padding-left: 15px;
+  margin-top: 5px;
+  border-radius: 10px;
+}
+.dropdown-container li a {
+  font-size: 15px !important;
+  padding: 10px 15px !important;
+  color: #6b7280 !important;
+}
+.dropdown-container li a:hover {
+  color: #db2777 !important;
+  background-color: #fbcfe8;
+  padding-left: 20px !important;
+}
+.arrow-icon {
+  font-size: 12px;
+  margin-left: auto;
+  transition: transform 0.3s;
+}
+.arrow-icon.rotate {
+  transform: rotate(180deg);
+}
+    
+    
+    
+  </style>
+</head>
+
+
+<!-- html-->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+
+
+
+<body>
+    <!--NAVI BAR & SIDEBAR (MENU) -->
+  <div class="header">
+    <div class="logo">🧶 Chubby Yarn</div>
+    <button class="menu-btn" onclick="tukarMenu()"><i class="fa fa-bars"></i></button>
+  </div>
+
+  <div class="overlay" id="myOverlay" onclick="tukarMenu()"></div>
+
+
+
+
+  <div class="sidebar" id="mySidebar">
+    <div class="close-btn" onclick="tukarMenu()"><i class="fa fa-times"></i></div>
+    
+    <ul class="sidebar-links">
+      
+    <li><a class="active" href="#" onclick="tukarMenu()"><i class="fa fa-fw fa-home"></i> Home</a></li>
+     
+      <li><a href="#about-us" onclick="tukarMenu()"><i class="fa fa-fw fa-heart"></i> About</a></li>
+      
+     
+      <li><a href="#yarn-cards" onclick="tukarMenu()"><i class="fa fa-shopping-basket"></i> Yarn Type</a></li> 
+      
+      <li>
+        <a href="javascript:void(0)" onclick="tukarDropdown()">
+          <i class="fa fa-fw fa-scissors"></i> Project <i class="fa fa-chevron-down arrow-icon" id="dropArrow"></i>
+        </a>
+        <ul class="dropdown-container" id="projectDropdown">
+         
+          <li><a href="#basic-terms" onclick="tukarMenu()"><i class="fa fa-picture-o"></i> Basic </a></li>
+   
+          <li><a href="#how-to-make" onclick="tukarMenu()"><i class="fa fa-video-camera"></i> Video How To Make</a></li>
+       
+          <li><a href="#extra-video" onclick="tukarMenu()"><i class="fa fa-youtube-play"></i> Extra Video</a></li>
+        </ul>
+      </li>
+  
+      <li><a href="#about-us" onclick="tukarMenu()"><i class="fa fa-fw fa-envelope"></i> Contact</a></li>
+    </ul>
+  </div>
+  
+  
+  
+  
+   
+
+   
+
+
+  <!--SLIDESHOW-->
+  <div class="slideshow-container">
+
+    <!-- Gambar 1 -->
+    <div class="mySlides fade">
+      <div class="numbertext">1 / 3</div>
+      <img src="https://i.pinimg.com/736x/1d/0a/fa/1d0afa74c0acec659f12a59f2dc3521c.jpg">
+      <div class="text">Yarn Type</div>
+    </div>
+
+    <!-- Gambar 2 -->
+    <div class="mySlides fade">
+      <div class="numbertext">2 / 3</div>
+      <img src= "C:\Users\User\OneDrive\Documents\ukm try\image\idea.jpg">
+      
+      
+      <div class="text">IDEA !!</div>
+    </div>
+
+    <!-- Gambar 3 -->
+    <div class="mySlides fade">
+      <div class="numbertext">3 / 3</div>
+      <img src="https://i.pinimg.com/736x/4b/5b/11/4b5b11c3a509acef687ac2a913122dc5.jpg">
+      <div class="text-pink">PATERN</div>
+    </div>
+
+    <!-- Butang Kiri Kanan -->
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+
+  </div>
+  <br>
+
+  <!-- Dot Bawah Slide -->
+  <div style="text-align:center; margin-bottom: 50px;">
+    <span class="dot" onclick="currentSlide(1)"></span> 
+    <span class="dot" onclick="currentSlide(2)"></span> 
+    <span class="dot" onclick="currentSlide(3)"></span> 
+  </div>
+  
+
+  
+  
+  
+  
+ <!-- flip card -->
+   <h2>✨ "Don't Pick the Wrong Yarn!✨</h2>
+
+  
+   <div id="yarn-cards" class="card-grid">
+
+    <!-- KAD 1 -->
+    <div class="yarn-card">
+      <div class="card-inner">
+        <div class="card-front">
+          <img src=https://i.pinimg.com/736x/52/9f/e5/529fe5dfd4af535856aeab012319d1ba.jpg>
+          <h3>Milk Cotton Yarn</h3>  
+
+        </div>
+        <div class="card-back">
+
+          <h3>Milk Cotton Yarn</h3>
+           <p class="recommendation">💡BEST USED AND TEXTURE </p>
+          <ul>
+
+            <li> Texture: Velvety, smooth, and slightly stretchy.</li>
+             <li> Best used for: Baby clothes, beanies, blankets, and plush amigurumi toys.</li>
+             
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAD 2 -->
+    <div class="yarn-card">
+      <div class="card-inner">
+        <div class="card-front">
+          <img src="https://i.pinimg.com/736x/a5/26/70/a526706918f2de79e77c2252d3a0d61e.jpg">
+          <h3>Pure Cotton Yarn</h3>
+        </div>
+        <div class="card-back">
+          <h3>Pure Cotton Yarny</h3>
+          <p class="recommendation">💡BEST USED AND TEXTURE</p>
+          <ul>
+        <li>Texture: Matte, firm, clean, and completely non-fuzzy.</li>
+        <li>Best used for: Tote bags, market bags, coasters, dishcloths, and water bottle holders.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAD 3 -->
+    <div class="yarn-card">
+      <div class="card-inner">
+        <div class="card-front">
+          <img src="https://i.pinimg.com/736x/5d/ef/cd/5defcd91fb960e09affd3bd6a0bce8b2.jpg">
+          <h3>Chenille / Velvet Yarn</h3>
+        </div>
+        <div class="card-back">
+          <h3>Chenille / Velvet Yarn</h3>
+          <p class="recommendation">💡BEST USED AND TEXTURE </p>
+          <ul>
+            <li>Texture: Super plush, thick, and feels exactly like a luxury velvet blanket.
+
+</li>
+            <li>Best used for: Giant amigurumi (huge plushies), chunky throw blankets, and cozy floor pillow  </li>
+          </ul>
+        </div>
+      </div>
+   
+  </div>
+  
+  
+    <!-- KAD 4 -->
+    <div class="yarn-card">
+      <div class="card-inner">
+        <div class="card-front">
+          <img src="https://i.pinimg.com/736x/0e/c9/c4/0ec9c43fe7f66c8c4db12cd33a4aeb41.jpg">
+          <h3>Bamboo Yarn</h3>
+        </div>
+        <div class="card-back">
+          <h3>Bamboo Yarn</h3>
+          <p class="recommendation">💡BEST USED AND TEXTURE </p>
+          <ul>
+            <li>Texture: Silky, cool to the touch, and has a beautiful, heavy fluid "drape" .
+
+
+</li>
+<li>Best used for: Summer garments, lightweight cardigans, shawls, and premium baby wear. </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <!-- KAD 5 -->
+    <div class="yarn-card">
+      <div class="card-inner">
+        <div class="card-front">
+          <img src="https://i.pinimg.com/736x/c6/47/40/c6474039d27fc96d9e0d385eea165cfb.jpg">
+          <h3>T-Shirt Yarn</h3>
+        </div>
+        <div class="card-back">
+          <h3>T-Shirt Yarn</h3>
+          <p class="recommendation">💡BEST USED AND TEXTURE </p>
+          <ul>
+            <li>Texture: Thick, wide, flat, and highly elastic.</li>
+<li>Best used for: Sturdy storage baskets, home rugs, and structured handbags that need to stand upright.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+        </div>
+
+
+  
+  <!-- BASIC TERMS & ABBREVIATIONS  -->
+<div id="basic-terms" style="max-width: 850px; margin: 50px auto; padding: 35px; background-color: #ffffff; border-radius: 30px; box-shadow: 0 12px 35px rgba(70, 130, 180, 0.1); font-family: 'Segoe UI', Roboto, sans-serif;">
+  
+  <!-- Tajuk Utama Berwarna Steel Blue & Ada Efek Cetakan Lembut -->
+  <div style="text-align: center; margin-bottom: 35px;">
+    <h2 style="color: #4682B4; display: inline-block; font-size: 28px; font-weight: 800; letter-spacing: 0.5px; margin: 0; padding-bottom: 8px; border-bottom: 3px dashed #70a1ff;">
+      🪄 Basic Crochet Terms & Abbreviations
+    </h2>
+  </div>
+  
+  <table style="width: 100%; border-collapse: separate; border-spacing: 0 12px; text-align: left; font-size: 15px;">
+    <thead>
+      <tr style="background-color: #4682B4; color: #ffffff;">
+        <th style="padding: 16px 20px; border-radius: 14px 0 0 14px; font-weight: 600; width: 25%;">Short Form</th>
+        <th style="padding: 16px 20px; border-radius: 0 14px 14px 0; font-weight: 600; width: 75%;">Full Meaning & Explanation</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <!-- 1. THE BASIC STITCHES -->
+      <tr style="background-color: #f0f8ff;"><td colspan="2" style="padding: 12px 20px; font-weight: bold; color: #4682B4; font-size: 16px; border-radius: 10px;">1. The Basic Stitches</td></tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">ch</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Chain</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">sc</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Single Crochet</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">hdc</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Half Double Crochet</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">dc</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Double Crochet</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">tc / tr</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Treble Crochet</td>
+      </tr>
+      <tr style="border-bottom: 1px solid #eceff1;">
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">sl st</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Slip Stitch</td>
+      </tr>
+
+      <!-- 2. STARTING & ENDING -->
+      <tr style="background-color: #f0f8ff;"><td colspan="2" style="padding: 12px 20px; font-weight: bold; color: #4682B4; font-size: 16px; border-radius: 10px;">2. Starting & Ending</td></tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">MR</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Magic Ring / Magic Circle</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">st / sts</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Stitch / Stitches</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">sp</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Space</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">sk</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Skip</td>
+      </tr>
+      <tr style="border-bottom: 1px solid #eceff1;">
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">FO</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Fasten Off</td>
+      </tr>
+
+      <!-- 3. SHAPING -->
+      <tr style="background-color: #f0f8ff;"><td colspan="2" style="padding: 12px 20px; font-weight: bold; color: #4682B4; font-size: 16px; border-radius: 10px;">3. Shaping</td></tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">inc</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Increase</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">dec</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Decrease</td>
+      </tr>
+      <tr style="border-bottom: 1px solid #eceff1;">
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">tog</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Together</td>
+      </tr>
+
+      <!-- 4. PLACEMENT -->
+      <tr style="background-color: #f0f8ff;"><td colspan="2" style="padding: 12px 20px; font-weight: bold; color: #4682B4; font-size: 16px; border-radius: 10px;">4. Placement</td></tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">BLO</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Back Loop Only</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">FLO</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Front Loop Only</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 20px; font-weight: bold; color: #70a1ff; font-size: 16px;">YO</td>
+        <td style="padding: 10px 20px; color: #2f3640; font-weight: 500;">Yarn Over</td>
+      </tr>
+
+    </tbody>
+  </table>
+  
+  
+
+  
+  <!-- QUICK EXAMPLE BOX -->
+ 
+  
+  <div style="margin-top: 25px; padding: 20px; background-color: #f1f2f6; border-left: 5px solid #4682B4; border-radius: 4px 12px 12px 4px; color: #2f3640;">
+  
+    <h4 style="margin: 0 0 10px 0; color: #4682B4; font-size: 16px;">📌 Quick Example :</h4>  <p style="margin: 0 0 6px 0; font-size: 15px; color: #4682B4; font-weight: bold; letter-spacing: 0.3px;">If a pattern says: <span style="background: #e0f2fe; padding: 2px 6px; border-radius: 4px;">"R1: 6 sc in MR"</span>
+      </p>
+      <p style="margin: 0; font-size: 14.5px; color: #57606f; line-height: 1.5;">
+        <strong>Meaning:</strong> Round 1: Work 6 single crochets into a Magic Ring.
+      </p>
+      
+      
+    <p style="margin: 0 0 6px 0; font-size: 15px; color: #4682B4; font-weight: bold; letter-spacing: 0.3px;">
+        If a pattern says: <span style="background: #e0f2fe; padding: 2px 6px; border-radius: 4px;">"R2: inc in each st"</span>
+      </p>
+      <p style="margin: 0; font-size: 14.5px; color: #57606f; line-height: 1.5;">
+        <strong>Meaning:</strong> Round 2: Work an increase (2 stitches) into every single stitch from the previous row.
+      </p>
+      
+</div>
+  </div>
+  <!-- VIDEOOOOOO -->
+  
+  <div id="how-to-make"  style="max-width: 850px; margin: 30px auto 50px auto; padding: 35px; background-color: #ffffff; border-radius: 30px; box-shadow: 0 12px 35px rgba(112, 145, 120, 0.12); font-family: 'Segoe UI', Roboto, sans-serif;">
+  
+  <div style="margin-bottom: 25px;">
+    <h4 style="margin: 0; color: #607d67; font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+     ▶️ Video How To Make 
+    </h4>
+
+  </div>
+    
+  <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: flex-start;">
+    
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/Zzyylyls6KE" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">1. Chain (ch)</span>
+    </div>
+
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/SFySpwJKHIc" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">2. Single Crochet (sc)</span>
+    </div>
+
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/xwrIkdz0KIo" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">3. Half Double Crochet</span>
+    </div>
+
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/FvJpjw-XA4E" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">4. Double Crochet (dc)</span>
+    </div>
+
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/fb5xzPS3nfc" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">5. Slip Stitch (sl st)</span>
+    </div>
+
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/8aK_OSjwECU" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">6. Magic Ring (MR)</span>
+    </div>
+
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/4xXLzqr6_ew" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">7. Increase (inc)</span>
+    </div>
+
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/10bNYRilJ2g" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">8. Decrease (dec)</span>
+    </div>
+
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/pCiq2VB7jH4" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">9. Back Loop Only (BLO)</span>
+    </div>
+
+    <div style="flex: 1 1 calc(33.333% - 10px); min-width: 220px; background: #f4f7f5; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); text-align: center; padding-bottom: 10px;">
+      <iframe style="width: 100%; height: 130px; border: none;" src="https://www.youtube.com/embed/CUsVbI7h9_w" allowfullscreen></iframe>
+      <span style="font-size: 13px; font-weight: 600; color: #2f3640; display: block; margin-top: 8px; padding: 0 5px;">10. Front Loop Only (FLO)</span>
+    </div>
+
+  </div>
+
+ </div>
+
+  <!-- EXTRA VIDEO  -->
+ 
+
+<div id="extra-video"style="max-width: 1500px; margin: 30px auto 50px auto; padding: 35px; background-color: #ffffff; border-radius: 30px; box-shadow: 0 12px 35px rgba(112, 145, 120, 0.12); font-family: 'Segoe UI', Roboto, sans-serif;">
+  
+  <div style="margin-bottom: 25px;">
+    <h4 style="margin: 0; color: #607d67; font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+     🎟️ Extra Video  !!!! 
+    </h4>
+
+
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1600px; margin: 0 auto; width: 100%;">
+
+  <!-- VIDEO 1 -->
+  <div style="width: 260px; background: #f4f7f5; border-radius: 12px; overflow: hidden;">
+    <iframe style="width: 280px; height: 130px; border: none;" src="https://www.youtube.com/embed/Gin0FmjPgeo" allowfullscreen></iframe>
+  </div>
+
+  <!-- VIDEO 2-->
+  <div style="width: 260px; background: #f4f7f5; border-radius: 12px; overflow: hidden;">
+    <iframe style="width: 280px; height: 130px; border: none;" src="https://www.youtube.com/embed/buWm9ddpUOs" allowfullscreen></iframe>
+  </div>
+
+  <!-- VIDEO 3 -->
+  <div style="width: 260px; background: #f4f7f5; border-radius: 12px; overflow: hidden;">
+    <iframe style="width: 280px; height: 130px; border: none;" src="https://www.youtube.com/embed/PddSZQOixgA" allowfullscreen></iframe>
+  </div>
+  
+    <!-- VIDEO 4 -->
+  <div style="width: 260px; background: #f4f7f5; border-radius: 12px; overflow: hidden;">
+    <iframe style="width: 280px; height: 130px; border: none;" src="https://www.youtube.com/embed/LF8BHi7Zaes" allowfullscreen></iframe>
+  </div>
+  
+  
+  <!-- VIDEO 5 -->
+  <div style="width: 260px; background: #f4f7f5; border-radius: 12px; overflow: hidden;">
+    <iframe style="width: 280px; height: 130px; border: none;" src="https://www.youtube.com/embed/ujS5gHtksR8" allowfullscreen></iframe>
+    
+    </div>
+  </div>
+   </div>
+  </div>
+
+  <!--  About -->
+  
+<div id="about-us" style="max-width: 850px; margin: 50px auto; padding: 45px 35px; background-color: #ffffff; border-radius: 30px; box-shadow: 0 12px 35px rgba(0,0,0,0.05); font-family: 'Segoe UI', Roboto, sans-serif; text-align: center;">
+  
+  <div style="max-width: 600px; margin: 0 auto 30px auto;">
+    <h3 style="color: #4682B4; font-size: 24px; font-weight: 800; margin: 0 0 14px 0;"> 🌱 About Us</h3>
+    <p style="color: #57606f; font-size: 16px; line-height: 1.6; margin: 0;">
+    
+We're here to make the art of crochet simple, cozy, and fun for everyone. We'll guide you from that first strand of yarn all the way to your final dream creation.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 2px dashed #f1f2f6; width: 50px; margin: 0 auto 25px auto;">
+  
+  
+  
+  
+  
+  
+  
+
+  <!--  Contact  -->
+  <div>
+    <h4 style="color: #607d67; font-size: 16px; font-weight: 700; margin: 0 0 15px 0;">MEET US AT : </h4>
+    
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+      <a href="mailto:aisyah.munwwarah@gmail.com
+" style="color: #57606f; padding: 8px 16px; border: 1.5px solid #eceff1; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.3s;"><i class= " bi bi-envelope "></i> Email</a>
+      <a href="https://www.instagram.com/aish.3s/" target="_blank" style="color: #57606f; padding: 8px 16px; border: 1.5px solid #eceff1; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.3s;"> <i class="bi bi-instagram"></i> Instagram</a>
+      <a href="https://www.tiktok.com/@aish0727" target="_blank" style="color: #57606f; padding: 8px 16px; border: 1.5px solid #eceff1; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.3s;"><i class="bi bi-tiktok"></i> TikTok</a>
+    </div>
+  </div>
+
+  <p style="color: #a4b0be; font-size: 12px; margin-top: 40px; margin-bottom: 0;">&copy; 2026 Crochet Space.</p>
+</div>
+  
+  
+ 
+ 
+ 
+   <!-- JAVASCRIPT  -->
+   
+  <script>
+  // --- dropdown menu  ---
+  function tukarDropdown() {
+  const dropdown = document.getElementById("projectDropdown");
+  const arrow = document.getElementById("dropArrow");
+  
+  if (dropdown.style.display === "block") {
+    dropdown.style.display = "none";
+    arrow.classList.remove("rotate");
+  } else {
+    dropdown.style.display = "block";
+    arrow.classList.add("rotate");
+  }
+}  
+    // --- MENU ---
+    function tukarMenu() {
+      document.getElementById("mySidebar").classList.toggle("open");
+      document.getElementById("myOverlay").classList.toggle("open");
+    }
+
+    // --- SLIDESHOW ---
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+      let i;
+      let slides = document.getElementsByClassName("mySlides");
+      let dots = document.getElementsByClassName("dot");
+      if (n > slides.length) { slideIndex = 1 }    
+      if (n < 1) { slideIndex = slides.length }
+      
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" slide-active", "");
+      }
+      slides[slideIndex-1].style.display = "block";  
+      dots[slideIndex-1].className += " slide-active";
+    }
+
+    // ---  KEYBOARD ---
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "ArrowRight") {
+        plusSlides(1);
+      } else if (event.key === "ArrowLeft") {
+        plusSlides(-1);
+      }
+    });
+   
+    
+    
+    
+    
+  </script>
+
+</body>
+</html>
